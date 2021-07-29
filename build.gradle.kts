@@ -30,9 +30,20 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    implementation("io.arrow-kt:arrow-core:0.13.2")
 }
 
 application {
     // Define the main class for the application.
     mainClassName = "quick.start.AppKt"
+}
+
+tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 }

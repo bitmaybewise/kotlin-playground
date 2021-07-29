@@ -3,11 +3,58 @@
  */
 package quick.start
 
+import arrow.core.*
+import arrow.core.Either.Right
+import arrow.core.Either.Left
+
 class App {
     val greeting: String
         get() = "Hello world."
 }
 
+fun playWithList() {
+    val value = (0..3)
+        .toList()
+        .map { (0..it).toList() }
+        .flatMap { it }
+        .filter { it % 2 == 0 }
+        .distinct()
+    println(value)
+}
+
+fun playWithOptional() {
+    val value = Some(1)
+        .map { it * 2 }
+        .flatMap { Some(it * 10) }
+        .filter { it % 3 == 0 }
+    println(value)
+}
+
+fun playWithEither() {
+    val value = Right(10)
+        .map { it * 2 }
+        .flatMap { Right("${it.toString()}!!!") }
+        .flatMap { Left("I don't care!") }
+    println(value)
+}
+
+fun playWithMiscellaneous() {
+    val value = (0..10)
+        .toList()
+        .map { n ->
+            if (n % 2 == 0) {
+                Right(n)
+            } else {
+                Left("Odd value $n!!!")
+            }
+        }
+        .traverseEither { it }
+    println(value)
+}
+
 fun main(args: Array<String>) {
-    println(App().greeting)
+//    playWithList()
+//    playWithOptional()
+//    playWithEither()
+    playWithMiscellaneous()
 }
