@@ -1,21 +1,21 @@
 import java.util.Calendar
+import java.util.TreeMap
 
 data class User(val email: String)
 
 object store {
     private val users = mutableListOf<User>()
+    private val emailIndex = TreeMap<String, Int>()
 
     fun add(user: User) {
         users.add(user)
+        emailIndex.put(user.email, users.size-1)
     }
 
     fun find(email: String): User? {
-        for (user in users) {
-            if (user.email == email) {
-                return user
-            }
-        }
-        return null
+        val idx = emailIndex.get(email) ?: -1
+        return if (idx > -1) users.get(idx)
+               else null
     }
 }
 
@@ -28,7 +28,7 @@ fun timeTaken(fn: () -> Unit): Long {
 }
 
 fun main(args: Array<String>) {
-    for (i in 0 until 50_000_000) {
+    for (i in 0 until 30_000_000) {
         val user = User(email="someone@${i}")
         store.add(user)
     }
@@ -39,5 +39,5 @@ fun main(args: Array<String>) {
         // user not found
     }
     println("time taken = ${milliseconds}")
-    // time taken = 389
+    // time taken = 22
 }
